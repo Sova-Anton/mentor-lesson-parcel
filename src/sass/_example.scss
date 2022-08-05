@@ -239,6 +239,9 @@ body.dark-theme {
 .load-more.is-hidden {
   display: none;
 }
+#tui-pagination-container.is-hidden {
+  display: none;
+}
 
 .search-btn:hover,
 .search-btn:focus,

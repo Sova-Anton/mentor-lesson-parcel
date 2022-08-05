@@ -16,6 +16,11 @@ const unSplashApi = new UnSplashApi();
 const page = pagination.getCurrentPage();
 
 unSplashApi.getPopularImages(page).then(({ total, total_pages, results }) => {
+  if(results.length === 0){
+    console.log('Error')
+    return
+  }
+  container.classList.remove('is-hidden')
   const markup = addGalleryMarkup(results);
   pagination.reset(total);
 
@@ -30,6 +35,11 @@ function popullar(e) {
     console.log(e.page);
 
 unSplashApi.getPopularImages(e.page).then(({ total, total_pages, results }) => {
+  if(results.length === 0){
+    console.log('Error')
+    return
+  }
+  container.classList.remove('is-hidden')
   const markup = addGalleryMarkup(results);
   //   pagination.reset(total);
 
@@ -53,6 +63,13 @@ function handleSubmit(e) {
   pagination.off('afterMove', eventSearchPagination)
   unSplashApi.query = searchQuery;
   unSplashApi.getImages(page).then(({ total, total_pages, results }) => {
+    if(results.length === 0){
+      container.classList.add('is-hidden')
+      console.log('Not found')
+      query.value = '';
+      return
+    }
+    container.classList.remove('is-hidden')
     const markup = addGalleryMarkup(results);
   pagination.reset(total);
   list.insertAdjacentHTML('beforeend', markup);
