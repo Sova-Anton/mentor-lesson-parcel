@@ -1,6 +1,8 @@
 import { getRefs } from "./getRefs";
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 import storage from "./storage";
+import throttle from "lodash.throttle"
+
 const refs = getRefs();
 
 refs.form.addEventListener('submit', handleSubmit);
@@ -19,22 +21,25 @@ function handleSubmit(e) {
     formData.forEach((value, name) => { userData[name] = value });
 
     e.target.reset();
-
-    Notify.success('успішно');
+    storage.remove('form-input-data');
+    Notify.success('Успішно');
 };
 
-refs.form.addEventListener("input", handleInput);
-
-const userData = {};
+refs.form.addEventListener("input", throttle(handleInput, 300));
 
 function handleInput(e) {
     let savedData = storage.load('form-input-data');
-    if (savedData) {
-        savedData[e.target.name] = e.target.value;
-    } else {
-        savedData = {};
-        savedData[e.target.name] = e.target.value;
-    }
+
+    savedData = savedData ? savedData : {};
+
+    savedData[e.target.name] = e.target.value;
+    
+    // if (savedData) {
+    //     savedData[e.target.name] = e.target.value;
+    // } else {
+    //     savedData = {};
+    //     savedData[e.target.name] = e.target.value;
+    // }
     storage.save('form-input-data', savedData);
     
 };
