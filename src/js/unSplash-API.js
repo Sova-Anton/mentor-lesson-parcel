@@ -21,4 +21,16 @@ export class UnSplashApi {
         })
     
     } 
+    getImages(page) {
+        const url = `${this.#BASE_URL}?page=${page}&query=${this.#query}&${this.#searchParams}`;
+        return fetch(url).then(response => {
+            if (!response.ok) {
+                throw new Error();
+            }
+            return response.json();
+        })
+    }
+    set query(newQuery) {
+        this.#query = newQuery;
+    }
 }
